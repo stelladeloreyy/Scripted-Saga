@@ -1,0 +1,238 @@
+// Add comments and preambles prior to submitting + attach maps
+
+package AssignmentTwo;
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		int numRoomsX = 8;
+		int numRoomsY = 8;
+		int numFloors = 2;
+		int numRooms = numRoomsX * numRoomsY * numFloors;
+		int currentRoomRow = 0;
+		int currentRoomCol = 0;
+		int currentRoomFloor = 0;
+		int gameState = 0;
+		Player currentPlayer = new Player(200, 20);
+		Title title = new Title();
+		Room[][][] roomArray = new Room[numRooms][numRooms][numRooms];
+		boolean[][][] roomSeenOnMap = new boolean[numRooms][numRooms][numRooms];
+		boolean[][][] bossRoom = new boolean[numRooms][numRooms][numRooms];
+		Scanner userInput = new Scanner(System.in);
+		Map[] mapFloor = new Map[numFloors];
+		// 1 = true, 0 = false
+		// Array predetermining each rooms exits (directions)
+		int[][][] exitNorth = { 
+				{
+					{ 0, 1, 1, 0, 1, 1, 0, 1 }, 
+					{ 0, 1, 1, 1, 0, 1, 0, 1 }, 
+					{ 0, 0, 0, 0, 0, 1, 0, 1 },
+					{ 0, 0, 1, 1, 1, 1, 1, 0 }, 
+					{ 0, 1, 0, 1, 0, 1, 1, 0 }, 
+					{ 0, 1, 1, 0, 1, 1, 1, 1 },
+					{ 0, 0, 1, 0, 1, 0, 1, 0 }, 
+					{ 0, 1, 1, 0, 1, 1, 1, 1 } 
+				},
+				{
+					{ 0, 0, 1, 1, 0, 1, 1, 1 },
+					{ 0, 1, 1, 0, 1, 1, 0, 1 }, 
+					{ 0, 0, 0, 1, 0, 0, 1, 1 },
+					{ 0, 0, 1, 1, 1, 1, 1, 0 },
+					{ 0, 1, 1, 1, 0, 0, 1, 0 },
+					{ 0, 0, 0, 0, 1, 0, 1, 1 },
+					{ 0, 1, 1, 1, 0, 1, 0, 0 },
+					{ 0, 1, 1, 1, 0, 1, 1, 1 }
+				}
+			};
+		int[][][] exitSouth = {
+				{
+					{ 1, 1, 0, 1, 1, 0, 1, 0 }, 
+					{ 1, 1, 1, 0, 1, 0, 1, 0 }, 
+					{ 0, 0, 0, 0, 1, 0, 1, 0 },
+					{ 0, 1, 1, 1, 1, 1, 0, 0 }, 
+					{ 1, 0, 1, 0, 1, 1, 0, 0 }, 
+					{ 1, 1, 0, 1, 1, 1, 1, 0 },
+					{ 0, 1, 0, 1, 0, 1, 0, 0 }, 
+					{ 1, 1, 0, 1, 1, 1, 1, 0 } 
+				},
+				{
+					{ 0, 1, 1, 0, 1, 1, 1, 0 },
+					{ 1, 1, 0, 1, 1, 0, 1, 0 },
+					{ 0, 0, 1, 0, 0, 1, 1, 0 },
+					{ 0, 1, 1, 1, 1, 1, 0, 0 },
+					{ 1, 1, 1, 0, 0, 1, 0, 0 },
+					{ 0, 0, 0, 1, 0, 1, 1, 0 },
+					{ 1, 1, 1, 0, 1, 0, 0, 0 },
+					{ 1, 1, 1, 0, 1, 1, 1, 0 }
+				}
+			};
+		int[][][] exitEast = { 
+				{
+					{ 1, 1, 1, 1, 0, 1, 1, 1 }, 
+					{ 1, 1, 1, 0, 1, 0, 1, 0 }, 
+					{ 1, 1, 1, 1, 0, 1, 1, 1 },
+					{ 1, 1, 0, 0, 1, 1, 0, 1 },
+					{ 0, 1, 1, 1, 1, 0, 1, 1 }, 
+					{ 1, 1, 0, 1, 0, 1, 0, 1 },
+					{ 0, 0, 1, 1, 0, 0, 0, 1 }, 
+					{ 0, 0, 0, 0, 0, 0, 0, 0 } 
+				},
+				{
+					{ 1, 0, 0, 1, 1, 1, 0, 1 },
+					{ 1, 0, 1, 1, 1, 1, 1, 1 },
+					{ 1, 1, 1, 0, 1, 1, 0, 1 },
+					{ 1, 0, 1, 0, 0, 1, 1, 1 },
+					{ 0, 1, 0, 1, 0, 1, 0, 0 },
+					{ 0, 1, 1, 1, 1, 0, 1, 1 },
+					{ 1, 0, 1, 1, 0, 1, 1, 1 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 }
+				}
+			};
+		int[][][] exitWest = { 
+				{
+					{ 0, 0, 0, 0, 0, 0, 0, 0 }, 
+					{ 1, 1, 1, 1, 0, 1, 1, 1 }, 
+					{ 1, 1, 1, 0, 1, 0, 1, 0 },
+					{ 1, 1, 1, 1, 0, 1, 1, 1 }, 
+					{ 1, 1, 0, 0, 1, 1, 0, 1 }, 
+					{ 0, 1, 1, 1, 1, 0, 1, 1 },
+					{ 1, 1, 0, 1, 0, 1, 0, 1 }, 
+					{ 0, 0, 1, 1, 0, 0, 0, 1 } 
+				},
+				{
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 1, 0, 0, 1, 1, 1, 0, 1 },
+					{ 1, 0, 1, 1, 1, 1, 1, 1 },
+					{ 1, 1, 1, 0, 1, 1, 0, 1 },
+					{ 1, 0, 1, 0, 0, 1, 1, 1 },
+					{ 0, 1, 0, 1, 0, 1, 0, 0 },
+					{ 0, 1, 1, 1, 1, 0, 1, 1 },
+					{ 1, 0, 1, 1, 0, 1, 1, 1 }
+				}
+			};
+		int[][][] roomExperience = {
+				{
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 }
+				},
+				{
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 },
+					{ 0, 0, 0, 0, 0, 0, 0, 0 }
+				}
+		};
+		while (gameState == 0) {
+			title.drawTitle();
+			boolean userChosen = false;
+			while (!userChosen) {
+				String userChoice = userInput.nextLine();
+				if (userChoice.equals("s")) {
+					gameState = 1;
+					userChosen = true;
+				} else {
+					System.out.println("Enter 's' to start");
+				}
+			}
+		}
+		fillRoomInformation(numRoomsX, numRoomsY, numRooms, roomArray, exitNorth, exitSouth, exitEast, exitWest, roomSeenOnMap, bossRoom, numFloors, currentRoomFloor, currentRoomCol, currentRoomRow, mapFloor, roomExperience);
+		firstRoomIntroduction(currentRoomRow, currentRoomCol, currentRoomFloor, roomArray, roomSeenOnMap);
+		while (gameState == 1) {
+			System.out.println("Which direction would you like to move? (n/s/e/w)");
+			boolean playerChosen = false;
+			while (!playerChosen) {
+				String userInputLetter = userInput.nextLine();
+				if (userInputLetter.equals("n") || userInputLetter.equals("s")) {
+					currentRoomCol = changeRoomsVertical(userInput, roomArray, currentRoomRow, currentRoomCol, currentRoomFloor, userInputLetter);
+					playerChosen = true;
+				} else if (userInputLetter.equals("e") || userInputLetter.equals("w")) {
+					currentRoomRow = changeRoomsHorizontal(userInput, roomArray, currentRoomRow, currentRoomCol, currentRoomFloor, userInputLetter);
+					playerChosen = true;
+				} else if (userInputLetter.equals("m")) {
+					mapFloor[currentRoomFloor].drawMap(roomSeenOnMap, exitNorth, exitSouth, exitEast, exitWest, currentRoomFloor, currentRoomRow, currentRoomCol);
+					playerChosen = true;
+				} else {
+					System.out.println("Please choose a valid answer");
+				}
+			}
+			roomSeenOnMap[currentRoomFloor][currentRoomRow][currentRoomCol] = true;
+			introduceNextRoom(roomArray, currentRoomRow, currentRoomCol, currentRoomFloor);
+			System.out.println(currentRoomRow + " " + currentRoomCol);
+		}
+	}
+
+	public static void fillRoomInformation(int numRoomsX, int numRoomsY, int numRooms, Room[][][] roomArray, int[][][] exitNorth, int[][][] exitSouth, int[][][] exitEast, int[][][] exitWest, boolean[][][] roomSeenOnMap, boolean[][][] bossRoom, int numFloors, int currentRoomFloor, int currentRoomCol, int currentRoomRow, Map[] mapFloor, int[][][] roomExperience) {
+		for (int floor = 0; floor < numFloors; floor++) {
+			for (int row = 0; row < numRoomsY; row++) {
+				for (int col = 0; col < numRoomsX; col++) {
+					roomSeenOnMap[floor][row][col] = false;
+				}
+			}
+		}
+		roomSeenOnMap[currentRoomFloor][currentRoomCol][currentRoomRow] = true;
+		for (int floor = 0; floor < numFloors; floor++) {
+			for (int row = 0; row < numRoomsY; row++) {
+				for (int col = 0; col < numRoomsX; col++) {
+					bossRoom[floor][row][col] = false;
+				}
+			}
+		}
+		bossRoom[1][4][4] = true; 
+		for (int floor = 0; floor < numFloors; floor++) {
+			for (int row = 0; row < numRoomsY; row++) {
+				for (int col = 0; col < numRoomsX; col++) {
+					if (bossRoom[floor][row][col]) {
+						roomArray[floor][row][col] = new BossRoom(exitNorth[floor][row][col], exitSouth[floor][row][col], exitEast[floor][row][col], exitWest[floor][row][col], roomExperience[floor][row][col]);
+				} else {
+						roomArray[floor][row][col] = new Room(exitNorth[floor][row][col], exitSouth[floor][row][col], exitEast[floor][row][col], exitWest[floor][row][col], roomExperience[floor][row][col]);
+					}
+				}
+			}
+		}
+		for (int i = 0; i < numFloors; i++) {
+			mapFloor[i] = new Map(numRooms, numRoomsX, numRoomsY, i);
+		}
+	}
+
+	public static void firstRoomIntroduction(int currentRoomRow, int currentRoomCol, int currentRoomFloor, Room[][][] roomArray, boolean[][][] roomSeenOnMap) {
+		roomSeenOnMap[currentRoomFloor][currentRoomCol][currentRoomRow] = true;
+		System.out.println("\nYou appear in an incredibly dark room\nJust seconds ago, you were on the bus heading home from the wondrous 'Glove World'\nAll you have from home is your glove balloon, now deflated, laying on the floor\nSuddenly, a dim red light hung above you turns on, revaling a sign that explains where you are :\n\n"
+				+ "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\r\n"
+				+ "█  ▄▄▄         ▄▄· ▄ •▄     ▄▄▄▄·       ▄▄▄▄▄▄▄▄▄▄      •   ▄ ·.   █\r\n"
+				+ "█  ▀▄ █·▪     ▐█ ▌▪█▌▄▌▪    ▐█ ▀█▪▪     •██  •██  ▪     ·██ ▐███▪  █\r\n"
+				+ "█  ▐▀▀▄  ▄█▀▄ ██ ▄▄▐▀▀▄·    ▐█▀▀█▄ ▄█▀▄  ▐█.▪ ▐█.▪ ▄█▀▄ ▐█ ▌▐▌▐█·  █\r\n"
+				+ "█  ▐█•█▌▐█▌.▐▌▐███▌▐█.█▌    ██▄▪▐█▐█▌.▐▌ ▐█▌· ▐█▌·▐█▌.▐▌██ ██▌▐█▌  █\r\n"
+				+ "█  .▀  ▀ ▀█▄▀▪·▀▀▀ ·▀  ▀    ·▀▀▀▀  ▀█▄▀▪ ▀▀▀  ▀▀▀  ▀█▄▀▪▀▀  █▪▀▀▀' █\r\n"
+				+ "█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█\n\nYou've got to find a way out of here\n");
+		roomArray[currentRoomFloor][currentRoomRow][currentRoomCol].drawRoom();
+	}
+
+	public static int changeRoomsVertical(Scanner userInput, Room[][][] roomArray, int currentRoomRow, int currentRoomCol,int currentRoomFloor, String userInputLetter) {
+		currentRoomCol = roomArray[currentRoomFloor][currentRoomRow][currentRoomCol].changeRooms(userInputLetter, currentRoomRow, currentRoomCol);
+		return currentRoomCol;
+	}
+
+	public static int changeRoomsHorizontal(Scanner userInput, Room[][][] roomArray, int currentRoomRow, int currentRoomCol, int currentRoomFloor, String userInputLetter) {
+		currentRoomRow = roomArray[currentRoomFloor][currentRoomRow][currentRoomCol].changeRooms(userInputLetter, currentRoomRow, currentRoomCol);
+		return currentRoomRow;
+	}
+	
+	public static int changeFloors(int currentRoomFloor) {
+		return currentRoomFloor;
+	}
+	//hi mr p it's sophie
+	public static void introduceNextRoom(Room[][][] roomArray, int currentRoomRow, int currentRoomCol, int currentRoomFloor) {
+		roomArray[currentRoomFloor][currentRoomRow][currentRoomCol].drawRoom();
+	}
+}
