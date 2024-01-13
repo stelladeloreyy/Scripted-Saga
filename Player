@@ -1,0 +1,28 @@
+package AssignmentTwo;
+
+public class Player {
+	private int maxHealth;
+	private int power;
+	private int currentHealth = maxHealth;
+	
+	public Player(int maxHealth, int power) {
+		this.power = power;
+		this.maxHealth = maxHealth;
+	}
+	
+	public void setCurrentHealth(int newCurrentHealth) {
+		this.currentHealth = newCurrentHealth;
+	}
+	
+	public void setPower(int newPower) {
+		this.power = newPower;
+	}
+	
+	public int getPower() {
+		return this.power;
+	}
+	
+	public int getCurrentHealth() {
+		return this.currentHealth;
+	}
+}
