@@ -1,0 +1,284 @@
+// Change drawings to be cool
+package AssignmentTwo;
+
+import java.util.Scanner;
+
+public class BossRoom extends Room {
+	private String roomDrawing;
+	
+	public BossRoom(int exitNorth, int exitSouth, int exitEast, int exitWest, int roomExperience) {
+		super(exitNorth, exitSouth, exitEast, exitWest, roomExperience);
+		this.numExits = exitNorth + exitSouth + exitEast + exitWest;
+	}
+	
+	public void roomExperienceOccurs(int playerDamage, Player currentPlayer) {
+		bossFight(playerDamage, currentPlayer);
+	}
+	
+	public void bossFight(int playerDamage, Player currentPlayer) {
+		boolean fightContinues = false;
+		boolean userAnswered = false;
+		Enemy Sandy = new BossEnemy(20, 500, "Sandy Cheeks", 4, 4);
+		Scanner userInput = new Scanner(System.in);
+		while (!userAnswered) {
+			System.out.println("You have entered a room with a dark figure standing near the back wall. It seems that the figure wants a fight.\nDo you engage? (y/n)");
+			String userFightBoss = userInput.nextLine();
+			if (userFightBoss.equals("y")) {
+				fightContinues = true;
+				userAnswered = true;
+				System.out.println("\nYou take a step towards the figure. She turns around to face you, allowing you to recoginize the manic look in her eyes. It's Sandy Cheeks");
+			} else if (userFightBoss.equals("n")) {
+				userAnswered = true;
+			} else {
+				System.out.println("Please enter a valid response");
+			}
+		}
+		while (fightContinues) {
+			userAnswered = false;
+			while (!userAnswered) {
+				// Add checker for health that changes phase
+				System.out.println("\nWhat do you do?\nAttack (a)\nRun away(r)");
+				String userChoice = userInput.nextLine();
+				if (userChoice.equals("a")) {
+					Sandy.takeDamage(playerDamage);
+					userAnswered = true;
+				} else if (userChoice.equals("r")) {
+					System.out.println("You abandon the fight, but retain all the damage you sustained");
+					userAnswered = true;
+					fightContinues = false;
+				} else {
+					System.out.println("Please enter a valid response");
+				}
+			}
+			Sandy.enemyAttack(currentPlayer);
+		}
+		userInput.close();
+	}
+	
+	public void drawRoom() { 
+		System.out.println("test");
+		switch (numExits) {
+		case 0 : // 0 exits
+			roomDrawing = "boss room\r\n" 
+					+ "██████████████████████████\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "█                        █\r\n"
+					+ "██████████████████████████";
+			break;
+		case 1 : // 1 exit
+			System.out.println(this.exitNorth);
+			if (this.exitNorth == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitSouth == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "████████          ████████";
+			} else if (this.exitEast == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                         \r\n"
+						+ "█                         \r\n"
+						+ "█                         \r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitWest == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "                         █\r\n"
+						+ "                         █\r\n"
+						+ "                         █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "██████████████████████████";
+			}
+			break;
+		case 2 : // 2 exits
+			if (this.exitEast == 1 && this.exitWest == 1) { // Horizontal line
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "                                     \r\n"
+						+ "                                     \r\n"
+						+ "                                     \r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitNorth == 1 && this.exitSouth == 1) { // Vertical line
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitNorth == 1 && this.exitEast == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitNorth == 1 && this.exitWest == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitSouth == 1 && this.exitEast == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitSouth == 1 && this.exitWest == 1) {
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			}
+			break;
+		case 3 : // 3 exits
+			if (this.exitSouth == 0) { // No south exit
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "\r\n"
+						+ "\r\n"
+						+ "\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitWest == 0) { // No west exit
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitEast == 0) { // No east exit
+				roomDrawing = "boss room\r\n" 
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitNorth == 0) { // No north exit
+				roomDrawing = "boss room\r\n" 
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "\r\n"
+						+ "\r\n"
+						+ "\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			}
+			break;
+		case 4 : // 4 exits
+			roomDrawing = "boss room\r\n" 
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "\r\n"
+					+ "\r\n"
+					+ "\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████";
+			break;
+		}
+		System.out.println(roomDrawing);
+	}
+}
