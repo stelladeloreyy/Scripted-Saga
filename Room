@@ -1,0 +1,378 @@
+package AssignmentTwo;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Room {
+	protected int exitNorth;
+	protected int exitSouth;
+	protected int exitEast;
+	protected int exitWest;
+	protected int numExits;
+	protected int roomExperience; 
+	protected int enemyNumber = 0;
+	protected ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private String roomDrawing;
+	Scanner userInput = new Scanner(System.in);
+	
+	public Room(int exitNorth, int exitSouth, int exitEast, int exitWest, int roomExperience) {
+		this.exitNorth = exitNorth;
+		this.exitSouth = exitSouth;
+		this.exitEast = exitEast;
+		this.exitWest = exitWest;
+		numExits = exitNorth + exitSouth + exitEast + exitWest;
+	}
+	
+	public int changeRooms(String chosenDirection, int currentRoomRow, int currentRoomCol) {
+		if (chosenDirection.equals("n") && this.exitNorth == 1) {
+			currentRoomCol = currentRoomCol - 1;
+			return currentRoomCol;
+		} else if (chosenDirection.equals("s") && this.exitSouth == 1) {
+			currentRoomCol = currentRoomCol + 1;
+			return currentRoomCol;
+		} else if (chosenDirection.equals("e") && this.exitEast == 1) {
+			currentRoomRow = currentRoomRow + 1;
+			return currentRoomRow;
+		} else if (chosenDirection.equals("w") && this.exitWest == 1) {
+			currentRoomRow = currentRoomRow - 1;
+			return currentRoomRow;
+		} else if (chosenDirection.equals("n") || chosenDirection.equals("s")) {
+			return currentRoomCol;
+		} else {
+			return currentRoomRow;
+		}
+	}
+	
+	// Does not include 2 - change floors
+	public void roomExperienceOccurs(Player currentPlayer) {
+		if (roomExperience == 0) {
+			System.out.println("The room is empty");
+		} else if (roomExperience == 1) {
+			enemyFight(currentPlayer);
+		} else if (roomExperience == 2) {
+			searchRoom();
+		}  else if (roomExperience == 3) {
+			teleportRooms();
+		} else if (roomExperience == 4) {
+			healingRoom(currentPlayer);
+		}
+	}
+	
+	// roomExperience 0
+	// Make array list of enemies, add one each time the method occurs
+	public void enemyFight(Player currentPlayer) {
+		int randomEnemyValue = (int)(Math.random() * 2) + 1;
+		boolean fighting = true;
+		switch (randomEnemyValue) {
+		case 1 : // Squidward enemy
+			enemies.add(new Enemy (30, 70, "Squidward", 1, 1));
+		case 2 : // Patrick enemy
+			enemies.add(new Enemy (15, 135, "Patrick", 2, 2));
+		case 3 : // Mr Krabs enemy
+			enemies.add(new Enemy (20, 100, "Mr. Krabs", 3, 3));
+		}
+		while (fighting) {
+			if (enemies.get(enemyNumber).getCurrentHealth() > 0 && currentPlayer.getCurrentHealth() > 0) {
+				boolean userAnswered = false;
+				while (!userAnswered) {
+					// Add checker for health that changes phase
+					System.out.println("\nWhat do you do?\nAttack (a)\nRun away(r)");
+					String userChoice = userInput.nextLine();
+					if (userChoice.equals("a")) {
+						enemies.get(enemyNumber).takeDamage(currentPlayer.getPower());
+						userAnswered = true;
+					} else if (userChoice.equals("r")) {
+						System.out.println("You abandon the fight, but retain all the damage you sustained");
+						userAnswered = true;
+						fighting = false;
+					} else {
+						System.out.println("Please enter a valid response");
+					}
+				}
+				enemies.get(enemyNumber).enemyAttack(currentPlayer);
+			} else if (currentPlayer.getCurrentHealth() < 0) {
+				// End game function here
+				fighting = false;
+			} else {
+				fighting = false;
+			}
+		}
+		enemyNumber = enemyNumber++;
+	}
+	
+	// roomExperience 1
+	public void searchRoom() {
+		System.out.println("Upon entering the room, you find a small chest laying beside the back wall.\nDo you open it?");
+		boolean userChosen = false;
+		while (!userChosen) {
+			String userChoice = userInput.nextLine();
+			if (userChoice.equals("y")) { // Finish items then add here
+				System.out.println("You search the chest, finding *random item*. It has been added to your inventory");
+				userChosen = true;
+			} else if (userChoice.equals("n")) {
+				System.out.println("You choose not to interact with the chest and move on");
+				userChosen = true;
+			} else {
+				System.out.println("Please enter a valid response");
+			}
+		}
+	}
+	
+	// roomExperience 2
+	public int changeFloors(int currentRoomFloor) {
+		System.out.println("You stumble across a flight of stairs leading into another dark room.\nWould you like to go up? (y/n)");
+		boolean userChosen = false;
+		while(!userChosen) {
+			String userChoice = userInput.nextLine();
+			if (userChoice.equals("y")) {
+				System.out.println("You quickly scale the flight of stairs to the next floor, entering a new room");
+				if (currentRoomFloor == 0) {
+					currentRoomFloor = currentRoomFloor++;
+				} else {
+					currentRoomFloor = currentRoomFloor--;
+				}
+				userChosen = true;
+			} else if (userChoice.equals("n")) {
+				System.out.println("You choose to remain on this floor");
+				userChosen = true;
+			} else {
+				System.out.println("Please enter a valid response");
+			}
+		}
+		return currentRoomFloor;
+	}
+	
+	// roomExperience 3
+	public void teleportRooms() {
+		
+	}
+	
+	public void healingRoom(Player currentPlayer) {
+		System.out.println("You feel a pleasent aura within this room. Your wounds begin to heal and you feel lighter on your feet.\nYou gain 50 health");
+		currentPlayer.setCurrentHealth(currentPlayer.getCurrentHealth() + 50);
+	}
+
+	public void drawRoom() { // Finish designing rooms
+		switch (numExits) {
+		case 0 : // 0 exits
+			roomDrawing = 
+			          "  ▄█████████████████████████\r\n"
+					+ " ▐█                        █\r\n"
+					+ " ▐█▌      •                █\r\n"
+					+ " ▪█▌       ▪             ▪█▄\r\n"
+					+ "· █                       █▌\r\n"
+					+ "   █                      ·█▌\r\n"
+					+ " ▐█                        █\r\n"
+					+ "  █▌                    ▪ ▄█\r\n"
+					+ " ▐█  •                   · █▄\r\n"
+					+ "  █▪       ▄▄▄▄     ▄      █▌\r\n"
+					+ "  ██████████████████████████";
+		case 1 : // 1 exit
+			if (this.exitNorth == 1) {
+				roomDrawing = 
+						  "  ████████          ███████\r\n"
+						+ " ▐█                  •    ▐█\r\n"
+						+ "  █                 ▪      █\r\n"
+						+ "•  █                      · █\r\n"
+						+ " ·▐█                        █\r\n"
+						+ " ▐█   ▪                    █\r\n"
+						+ "  █    ·                   █\r\n"
+						+ "  █▌                      •█\r\n"
+						+ " █▌                      · █\r\n"
+						+ "  █ ▪  ▄▄         •  ▄      █\r\n"
+						+ "  ██████████████████████████";
+			} else if (this.exitSouth == 1) {
+				roomDrawing = 
+						  "  ██████████████████████████▄\r\n"
+						+ " ▐█·                     ▪ █\r\n"
+						+ " ▐█                        █\r\n"
+						+ "  ██      · ▪              ▐█\r\n"
+						+ "  ██      •               • █\r\n"
+						+ " ▐█▌                       █\r\n"
+						+ "  █▪                     ▪ █▌\r\n"
+						+ "  █ ·                   · ▐█\r\n"
+						+ " █▌                       █\r\n"
+						+ "  ██   ▄               ▄▄  █\r\n"
+						+ "  ████████ •        ████████";
+			} else if (this.exitEast == 1) {
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                         \r\n"
+						+ "█                         \r\n"
+						+ "█                         \r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitWest == 1) {
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "                         █\r\n"
+						+ "                         █\r\n"
+						+ "                         █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "█                        █\r\n"
+						+ "██████████████████████████";
+			}
+			break;
+		case 2 : // 2 exits
+			if (this.exitEast == 1 && this.exitWest == 1) { // Horizontal line
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitNorth == 1 && this.exitSouth == 1) { // Vertical line
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitNorth == 1 && this.exitEast == 1) {
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitNorth == 1 && this.exitWest == 1) {
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitSouth == 1 && this.exitEast == 1) {
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████                        \r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitSouth == 1 && this.exitWest == 1) {
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			}
+			break;
+		case 3 : // 3 exits
+			if (this.exitSouth == 0) { // No south exit
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████";
+			} else if (this.exitWest == 0) { // No west exit
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████                  \r\n"
+						+ "████████                  \r\n"
+						+ "████████                  \r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitEast == 0) { // No east exit
+				roomDrawing = 
+						  "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "                  ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			} else if (this.exitNorth == 0) { // No north exit
+				roomDrawing = 
+						  "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "██████████████████████████\r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "                          \r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████\r\n"
+						+ "████████          ████████";
+			}
+			break;
+		case 4 : // 4 exits
+			roomDrawing = 
+			          "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "                          \r\n"
+					+ "                          \r\n"
+					+ "                          \r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████\r\n"
+					+ "████████          ████████";
+			break;
+		}
+		System.out.println(roomDrawing);
+	}
+}
