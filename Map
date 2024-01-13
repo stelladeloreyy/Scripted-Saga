@@ -1,0 +1,263 @@
+
+package AssignmentTwo;
+
+// Use setter within main to update appearing boolean
+
+public class Map {
+	private int numRooms;
+	private int numRoomsX;
+	private int numRoomsY;
+	private int floorNumber;
+
+	public Map(int numRooms, int numRoomsX, int numRoomsY, int floorNumber) {
+		this.numRooms = numRooms;
+		this.numRoomsX = numRoomsX;
+		this.numRoomsY = numRoomsY;
+		this.floorNumber = floorNumber;
+	}
+
+	public void drawMap(boolean[][][] roomSeenOnMap, int[][][] exitNorth, int[][][] exitSouth, int[][][] exitEast, int[][][] exitWest, int currentRoomFloor, int currentRoomRow, int currentRoomCol) {
+		String[][][][] mapRoomDrawing = new String[numRooms][numRooms][numRooms][numRooms];
+		String mapDrawing = "";
+		int numExits;
+		for (int col = 0; col < this.numRoomsY; col++) {
+			for (int row = 0; row < this.numRoomsX; row++) {
+				if (!roomSeenOnMap[this.floorNumber][col][row]) {
+					mapRoomDrawing[this.floorNumber][row][col][0] = "            ";
+					mapRoomDrawing[this.floorNumber][row][col][1] = "            ";
+					mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+					mapRoomDrawing[this.floorNumber][row][col][3] = "            ";
+					mapRoomDrawing[this.floorNumber][row][col][4] = "            ";
+				} else if (col == currentRoomRow && row == currentRoomCol) {
+					numExits = exitNorth[this.floorNumber][col][row] + exitSouth[this.floorNumber][col][row] + exitEast[this.floorNumber][col][row] + exitWest[this.floorNumber][col][row];
+					switch (numExits) {
+					case 0:
+					case 1:
+						if (exitNorth[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#    x     #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitSouth[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#    x     #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#    x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x     #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						}
+						break;
+					case 2:
+						if (exitEast[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) { // Horizontal line
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitSouth[this.floorNumber][col][row] == 1) { // Vertical
+																											// line
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#### x  ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#### x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x  ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitSouth[this.floorNumber][col][row] == 1 && exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#### x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitSouth[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x  ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						}
+						break;
+					case 3:
+						if (exitSouth[this.floorNumber][col][row] == 0) { // No south exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitWest[this.floorNumber][col][row] == 0) { // No west exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#### x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitEast[this.floorNumber][col][row] == 0) { // No east exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x  ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitNorth[this.floorNumber][col][row] == 0) { // No north exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "     x      ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						}
+						break;
+					case 4:
+						mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+						mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+					}
+				} else {
+					numExits = exitNorth[this.floorNumber][col][row] + exitSouth[this.floorNumber][col][row] + exitEast[this.floorNumber][col][row] + exitWest[this.floorNumber][col][row];
+					switch (numExits) {
+					case 0:
+					case 1:
+						if (exitNorth[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitSouth[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "#           ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "           #";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "#          #";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						}
+						break;
+					case 2:
+						if (exitEast[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) { // Horizontal line
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitSouth[this.floorNumber][col][row] == 1) { // Vertical
+																											// line
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "####        ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitNorth[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "        ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitSouth[this.floorNumber][col][row] == 1 && exitEast[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "####        ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitSouth[this.floorNumber][col][row] == 1 && exitWest[this.floorNumber][col][row] == 1) {
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "        ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						}
+						break;
+					case 3:
+						if (exitSouth[this.floorNumber][col][row] == 0) { // No south exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "############";
+						} else if (exitWest[this.floorNumber][col][row] == 0) { // No west exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "####        ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitEast[this.floorNumber][col][row] == 0) { // No east exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "        ####";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						} else if (exitNorth[this.floorNumber][col][row] == 0) { // No north exit
+							mapRoomDrawing[this.floorNumber][row][col][0] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][1] = "############";
+							mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+							mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+							mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+						}
+						break;
+					case 4:
+						mapRoomDrawing[this.floorNumber][row][col][0] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][1] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][2] = "            ";
+						mapRoomDrawing[this.floorNumber][row][col][3] = "####    ####";
+						mapRoomDrawing[this.floorNumber][row][col][4] = "####    ####";
+					}
+				}
+			}
+		}
+		System.out.println(mapDrawing
+				+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		for (int row = 0; row < this.numRoomsY; row++) {
+			for (int line = 0; line < 5; line++) {
+				for (int col = 0; col < this.numRoomsX; col++) {
+					mapDrawing = mapDrawing + mapRoomDrawing[this.floorNumber][row][col][line];
+				}
+				mapDrawing = mapDrawing + "\n";
+			}
+		}
+		/*
+		 * } else if (currentRoomFloor == 1) { for (int row = 0; row < this.numRoomsY;
+		 * row++) { for (int line = 0; line < 5; line++) { for (int col = 0; col <
+		 * this.numRoomsX; col++) { mapDrawing = mapDrawing +
+		 * mapRoomDrawing[1][row][col][line]; } mapDrawing = mapDrawing + "\n"; } } }
+		 */
+		System.out.println(mapDrawing
+				+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	}
+}
