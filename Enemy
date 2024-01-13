@@ -1,0 +1,59 @@
+package AssignmentTwo;
+
+public class Enemy {
+	protected int maxHealth;
+	protected int currentHealth = this.maxHealth;
+	protected int power; // Represents damage per outgoing attack
+	protected String enemyName;
+	protected int enemyType;
+	protected int attackType;
+	
+	public Enemy(int power, int maxHealth, String enemyName, int attackType, int enemyType) {
+		this.power = power;
+		this.maxHealth = maxHealth;
+		this.enemyName = enemyName;
+		this.attackType = attackType;
+		this.enemyType  = enemyType;
+	}
+	
+	public int getCurrentHealth() {
+		return currentHealth;
+	}
+	
+	public void takeDamage(int damageInflicted) {
+		if (currentHealth - damageInflicted > 0) {
+			currentHealth =- damageInflicted;
+			System.out.println("The " + this.enemyName + " takes " + damageInflicted + " damage, but continues to fight");
+		} else {
+			enemyDeath();
+		}
+	}
+	
+	public void enemyDeath() {
+		System.out.println("The " + this.enemyName + "slumps to ground in a dramatic fashion. It is dead");
+	}
+	
+	public void enemyAttack(Player currentPlayer) {
+		if (this.attackType == 1) {
+			System.out.println("The " + this.enemyName + "pierces you with his awful clarinet playing, dealing " + this.power + " damage");
+		} else if (this.attackType == 2) {
+			System.out.println("The " + this.enemyName + " releases a sickening belch, filling the room with an unbearable odor. The stench alone rattles your bones, dealing " + this.power + " damage");
+		} else if (this.attackType == 3) {
+			System.out.println("The " + this.enemyName + " chucks fake dollars at your head while laughing heartily, dealing " + this.power + " damage");
+		}
+	}
+	
+	public int enemyAttackDamage() {
+		return this.power;
+	}
+	
+	public void drawEnemy() {
+		if (this.enemyType == 1) {
+			System.out.println();
+		} else if (this.enemyType == 2) {
+			System.out.println();
+		} else if (this.enemyType == 3) {
+			
+		}
+	}
+}
