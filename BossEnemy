@@ -1,0 +1,151 @@
+package AssignmentTwo;
+
+public class BossEnemy extends Enemy {
+	private int fightStage = 0;
+
+	public BossEnemy(int power, int maxHealth, String enemyName, int attackType, int enemyType) {
+		super(power, maxHealth, enemyName, attackType, enemyType);
+	}
+
+	// Add player defense when created
+	@Override
+	public void enemyAttack(Player currentPlayer) {
+		int randomLine = (int)(Math.random() * 2) + 1;
+		switch(this.fightStage) {
+		case 0 :
+			if (randomLine == 1) {
+				System.out.println(this.enemyName + " attacks you furiously with her karate moves.\nHer powerful swings deal " + this.power + " damage");
+			} else if (randomLine == 2) {
+				System.out.println(this.enemyName + " sends a flurry of her most deadly inventions in your directon.\nA couple of them reach you, dealing " + this.power + " damage");
+			} else if (randomLine == 3) {
+				System.out.println(this.enemyName + " whips you with her tail.\nIt hits you much harder than anyone could've expected, dealing " + this.power + " damage");
+			}
+			currentPlayer.setCurrentHealth(currentPlayer.getCurrentHealth() - this.power);
+		case 1 :
+			if (randomLine == 1) {
+				System.out.println("A series of rockets are ejected from " + this.enemyName + "'s robot arms.\nFlames are ejected from her robot mouth and her pupils wander even further apart. Her frenzied attacks deal " + (this.power + 5) + " damage");
+			} else if (randomLine == 2) {
+				System.out.println(this.enemyName + " glares at you with hauntingly.\nThere is nothing behind those eyes but the burning pits of bikini bottom hell.\n Not only are you scarred for life, but you take " + (this.power + 5) + " damage");
+			} else if (randomLine == 3) {
+				System.out.println("You go to swing at " + this.enemyName + " but hit her scorching hot grill of a mouth.\nYou are dealt " + (this.power + 5) + " damage in the form of third degree burns");
+			}
+			currentPlayer.setCurrentHealth(currentPlayer.getCurrentHealth() - this.power + 5);
+		case 2 :
+			if (randomLine == 1) {
+				System.out.println(this.enemyName + "'s insanity is radiating, and is starting to affect you too.\nYou punch yourself in the face as a result, dealing " + (this.power + 10) + "damage");
+			} else if (randomLine == 2) {
+				System.out.println(this.enemyName + " claws at you madly.\nHer violent attacks deal " + (this.power + 10) + " damage");
+			} else if (randomLine == 3) {
+				System.out.println("With the hint of sanity she has left, " + this.enemyName + " asks you to stop fighting.\nHer pupils dilate once again and proceeds to whip you into the wall, dealing " + (this.power + 10) + " damage");
+			}
+			currentPlayer.setCurrentHealth(currentPlayer.getCurrentHealth() - this.power + 10);
+		}
+	}
+	
+	public void setFightStage(int newFightStage) {
+		this.fightStage = newFightStage;
+		System.out.println(this.enemyName + " grows increasingly more insane.\nShe changes forms and becomes even more powerful!");
+	}
+	
+	public void drawBoss() {
+		if (this.fightStage == 0) {
+			System.out.println("                                           ▄▄▄\r\n"
+					+ "                                          ,█╟ █\r\n"
+					+ "                          ,▄∞══════¬⌐▄▄, ▄▀▄▀▀\r\n"
+					+ "                      ▄M▀'           ▀ '▀█▄\r\n"
+					+ "                    ²  ╓*▀▀ ═      ▀ ▄▀▀▄ '█▄\r\n"
+					+ "                  ╓  ╔  ▐  ,   \"``\"`-▀    ▀▀╩█\r\n"
+					+ "                  ▌  └,√ ▄█ , ,▄ ^,  ╚.,     ▐                ╔\"╕\r\n"
+					+ "                 ▐      └█▄▄ ,▓   '     ▐     ▌                ▌,,,,\r\n"
+					+ "                 ▐       ╓╙╙ -╜ ,═      ▐▌   ▐                ]⌐      *,\r\n"
+					+ "                  ▌      ▀ ═  ▄▓,,.-  ,═\"    ▓                 ▀▄,,     \\\r\n"
+					+ "                   ▌,     \\   ,    \"`       ▀                      ▌\r\n"
+					+ "                    `▌═════════════▀▀ ▀▀▀ⁿ▓▄         ▄▄          ,r    ,$Æ\r\n"
+					+ "                    █  ═══    L           ╚█    ,∞\"`   ▐ ⌐*\"\"\"\"`      ,ⁿ\r\n"
+					+ "                  ▄ ▀         ▌             ▀▄~     æ  `          \"   ▄\r\n"
+					+ "                r     ▄ ▄≡▄   ▌                ▄                      ▌\r\n"
+					+ "               `    ▐ ▌ ╟    ▐ \"▀`        ,▄▄▀` ╙╬▄,                  ╓\r\n"
+					+ "              ╟     ▐\"▀▀`--  █         ╓▄▀▀         \\                Æ\r\n"
+					+ "              █     [        █ ``       ▀                  ,▀╛     ¿\"\r\n"
+					+ "              ⌡     [        █             ▌        ▐            ╓╜\r\n"
+					+ "              ,\"^^^═█       ,█▄▄▄▄▄▄▄▄▄▄,, ▌        █        ,∞\"\r\n"
+					+ "             ,█      ▌                 . █ █        █    ``\r\n"
+					+ "             `█   , ▐               ,,,],█▄█▄,     ▐`\r\n"
+					+ "              ▐▌ ,,▓█▐▀▀   --` ▄  ▐    ▄▌     ▀▄  ▄▀\r\n"
+					+ "                \"▀▀' '       ╓▀   █  ▄▄⌐▀`      █▀\r\n"
+					+ "                   ▐         ▌     ▌    ▄▌     ▄\r\n"
+					+ "             ▓``\"'            ▌  ▄\"      ▀▀\"▀▀▀\r\n"
+					+ "            ▓          '\"  ▀▌  ▌▐           ]▌\r\n"
+					+ "           █                   ▌▌            █\r\n"
+					+ "           █                  ]-▌        ,   '▌\r\n"
+					+ "            `▀▀▀▀▀▀▀▀▀▀ ▐▀▀▀▀▀▀▀▀══╩▀ ");
+		} else if (fightStage == 1) {
+			System.out.println("                                                                       ,\r\n"
+					+ "                                                                     █▀█▐\r\n"
+					+ "                                                                   ▄▐█▀▀`\r\n"
+					+ "                                    ,,▄▄╥⌐===⌐⌐.,,      \"▄      ,▄██▀\r\n"
+					+ "                            ,▄ ▀▀▀╚▀▀▀``-'\"▀▀¬.`\"\" ▄ /█▀   \"▄ ▄▀▄▀`\r\n"
+					+ "                      .═,⌐\"' ,═`                 `^¬ `▀▄     \" ▌\r\n"
+					+ "                    ∞▄ ▀,` ``\"   ,,,▄▄▄▄ ╓▄▄▄▄,    ,  , ` ▄ ▄  ╙█\r\n"
+					+ "                  ▄▀▄╛ ,`   ,▀▀▀`╓            `\" ═▓    ▀▄  ╙▓▓   ▀╗\r\n"
+					+ "               ⌐  ═   ▐ ,\"*▄▄▄▀▀▀``\"▄      ▄╝▀\"▀▀ ▄ ▌.  ▀    ╙█  █ `\r\n"
+					+ "               ▄▌       \"▀▐▌▄▄▄      █,,,,█,    ,▄ ,▓^ⁿ\"      \"██▀\r\n"
+					+ "             [▓           █▌ ' \"▄,█`   █▐-▀▀▓,,╔▀▀  █▌         ▐▌\r\n"
+					+ "            ]▓          ,╦ ╩▀▀▀╙\"\"▀▀▄  █  ,▄█\"\"▀▀▀▀▓▓▓,         █\r\n"
+					+ "            ▐▌           ,▄▄,        ▀█▀▀▀▀           ╙▀        ▌█\r\n"
+					+ "            █▌        ] ▀▌ ▓▌`▀▀▀═    ▄▄  ▄▄▄▄▄▄   ▀'' ▄      [[█Å\r\n"
+					+ "           ╓█,        ▐ ▌  █▌  █▐ ▐▓  █▌  ▐▓  ▐█  ▐▐   ▐▐       [█ L\r\n"
+					+ "           ▐▓║        ▌    ▓   █▐ ▐█▀ █▌▄▄██  ▐█  ▓▐   █▐       ██ ╟\r\n"
+					+ "            ▌▐        ▌ '\"▀▀ ╖ ▌▀ ▀▀ ▀▀▀▀╝██▄▄▐█  ▌▐,,,▌▐      ▐██ F\r\n"
+					+ "            █         ▌ ,▄  ▀\"`'╨╙╜╙╙╙╙ ▀▀▀▀▀   ██▌▀    █     ▄▓█▌╛\r\n"
+					+ "            ▐▌▐       ▓`                          '▀█▓  █    /,██`\r\n"
+					+ "             █╣╕      ▌                              ╘█▌    ƒ▄██`\r\n"
+					+ "             `▌       █▄          ,▄▄▄▄▄▄▄▄▄▄         ▐▌     ▄█\r\n"
+					+ "               ▀▄      `▀▄▄▄▄▄  ≡▌▀╗        ▌▄▄,,  ,▄▀    ,█▓\r\n"
+					+ "                ,▀\"\"`-`              ▄▄█▄   ``\"\"\"*╨╩`\" ▀&▄▄█ƒ\r\n"
+					+ "               ▐█  ▄▀▀▄              █▄▄█              ▄▓▀█▐█▌\r\n"
+					+ "               ▐▌  ▀▌▄▀            ,,,▄▄▄ ╓~~~  ▄▄▄,,  ▀▄▄█  ▌\r\n"
+					+ "                ╩═  \"\"▀▀▀▀▀▀▀▀▀▀▀▀-` ▄▀█▀█ - ``\"\"\"ⁿ╙▀▀▀▀▀ ▄▄,╘`\r\n"
+					+ "                            ▓        ▌▄█ ▄\"\r\n"
+					+ "                          █▌▌         ▌▀█     ] ▐▀▀▀▀▀▀▌═\r\n"
+					+ "                            ▌        █  ▐▄    ▐     ,  `\r\n"
+					+ "                            ▌         ▀▀▀     █   ██═~▀ ▐\r\n"
+					+ "                           ▐           ▐▄     ▌  ▐   ╓▐ ▐\r\n"
+					+ "                         ▀▌▐`         ,▄█         ▀  ▀  █\r\n"
+					+ "                           █         ▐█▄       \"r     ,∞█\r\n"
+					+ "                           █          ▀██    `\"▀▀▀     ▓▌\r\n"
+					+ "                           ▌           ▄▀\r\n" + "                        ¬▄ ▌         ▄▀\r\n"
+					+ "                           ▌");
+		} else if (fightStage == 2) {
+			System.out.println("      ▀                     ,╗,                    ²                    /\r\n"
+					+ "    C  ,                      -▀█▄                ▐ ]                  /¿\r\n"
+					+ "       █                    ▌    ▀█               [                   ,▀\"\r\n"
+					+ "    \\  ⌐                    ▄▄▄▄▄▄▐▄              ▐                    Å\r\n"
+					+ "     []          ╓▄▀ ▄▄▄▄▄▀▀▀ `▀▀█▄▀▄>,           \\          ` ▀     /\r\n"
+					+ "     ║ .        ▐{      ,██████▌  ██   ▀▀ ▄ ,╓═ ╙`-`\"\"▀▀▄     ═    ,,^\r\n"
+					+ "     ▐ █       .▐.      ▐▀█████─  ▌█       ▄█████▄,  ,,,▄▌      , ╨`\r\n"
+					+ "     ]- µ    ,▀▀▀▀██▄╓,`▀█▄,▀▀ ▄█ ▀▀ ▄   █▀'     ▀█▌¿▀'      ⌐'`\r\n"
+					+ "      ▌ ▀ \"\"▐▌       -▀\"--▀▀█▀█▄      ▀▄█\" ▄███▀\\   █▀     ,═`\r\n"
+					+ "      \\,▄▄▄▄▓█▀▀▌           ▐║  ▀▌     █▌▐███████▀-     }           ,⌐▄\r\n"
+					+ "            ▀█ ,▐█ , █▌  \"╦ ▐▌    ▌    ▐█ '▀▀\" <        .          '*╕ *▌\r\n"
+					+ "              ╔ //`▀▄ ▀██▄██▀    ▐▓     ▀▀▄╖,▄█\"        ▌▌         .^ \\.  \r\n"
+					+ "              ▌ █  ▐█      ▌¿████▌ ▀▄         ▀█       ] Γ        ╛    ▄²\r\n"
+					+ "            ¿▐ █   █-     ▐ █   ╘▌   ▀         ╟▌▄     [         ▐    ƒ\r\n"
+					+ "            '█▐-  █      ,▌█     ▌   ,▌      ▄²`  '▄   █         ▌   ╛\r\n"
+					+ "             ▌█▄  ║      ██-   ▐   ▄▀       ╝  -▀▀▄ J▄ ▀        ▐ ,▄▀\r\n"
+					+ "             ▌▌ ▀▄▄     j█▌  ╔╦'  █      ▄\"        ▀7╙█▌       F ╔⌐\r\n"
+					+ "             █▌   █     ▐█   ╠  ▄▀      ▓           `▄ ▀>    ,`▄▀\r\n"
+					+ "                  ▌     ╘█ ▌▀ ▄█       ╒             ▐▌  ▀▌ /,F\r\n"
+					+ "                 ▐      ,Æ▓▄▀▀`        ▌              █    ╜▄'\r\n"
+					+ "                ▌     ,═██▌,,.▄ \"\"▀▀ ═                ▐   ,█\r\n"
+					+ "                █     ▄▀  ¬`'¬         ╙               █ /█▀\r\n"
+					+ "               █   ▐██`                 ▐              ║▄█\r\n"
+					+ "              █   ▄█▀                                   \"\r\n"
+					+ "             █   ██'                     ▐         ▌\r\n"
+					+ "            ▐  ,█▀                               .\"\r\n"
+					+ "             ▀▀                           ▌     ▌\r\n"
+					+ "                                          ▐\r\n"
+					+ "                                            \"");
+		}
+	}
+}
